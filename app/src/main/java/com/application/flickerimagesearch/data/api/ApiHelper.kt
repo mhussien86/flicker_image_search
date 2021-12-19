@@ -5,6 +5,6 @@ import retrofit2.Response
 
 interface ApiHelper {
 
-    suspend fun fetchImages(): Response<SearchResponseWrapper>
+    suspend fun fetchImages(searchText: String): Response<SearchResponseWrapper>
 
 }
