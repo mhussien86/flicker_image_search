@@ -1,7 +1,7 @@
 package com.application.flickerimagesearch.data.model
 
-data class SearchResponseWrapper(
-    val photosMetaData: PhotosMetaData
+data class PhotosSearchResponse(
+    val photos: PhotosMetaData
 )
 
 data class PhotosMetaData(
