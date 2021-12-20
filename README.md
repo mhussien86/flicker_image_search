@@ -2,7 +2,7 @@
 
 
 ### What is this repository for? ###
-Flicker image search app using mvvm archtecture + repository pattern. 
+Flicker image search app using mvvm architecture + repository pattern. 
 
 
 ### How do I get set up? ###
