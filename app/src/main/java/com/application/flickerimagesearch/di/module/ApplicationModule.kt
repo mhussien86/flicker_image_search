@@ -5,6 +5,8 @@ import com.application.flickerimagesearch.BuildConfig.DEBUG
 import com.application.flickerimagesearch.data.api.ApiHelper
 import com.application.flickerimagesearch.data.api.ApiHelperImpl
 import com.application.flickerimagesearch.data.api.ApiService
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +14,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -42,7 +44,13 @@ class ApplicationModule {
         BASE_URL: String
     ): Retrofit =
         Retrofit.Builder()
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(
+                GsonConverterFactory.create(
+                    GsonBuilder()
+                        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                        .create()
+                )
+            )
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .build()
