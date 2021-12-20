@@ -26,14 +26,15 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _photos.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
-                val searchResponse = mainRepository.fetchImages(searchText)
-                if (searchResponse.isSuccessful) {
-                    _photos.postValue(Resource.success(searchResponse.body()?.photos?.photo))
-                } else _photos.postValue(Resource.error(searchResponse.errorBody().toString(), null))
+                mainRepository.fetchImages(searchText).let { searchResponse ->
+                    if (searchResponse.isSuccessful) {
+                        _photos.postValue(Resource.success(searchResponse.body()?.photos?.photo))
+                    } else _photos.postValue(Resource.error(searchResponse.errorBody().toString(), null))
+                }
             } else _photos.postValue(Resource.error("No internet connection", null))
         }
-    }
 
+    }
 }
 
 

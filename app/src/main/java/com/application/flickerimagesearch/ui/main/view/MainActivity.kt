@@ -19,49 +19,54 @@ class MainActivity : AppCompatActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
     private lateinit var adapter: MainAdapter
-    private var binding: ActivityMainBinding? = null
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
+        setContentView(binding.root)
         setupUI()
         setupObserver()
     }
 
     private fun setupUI() {
-        binding?.searchButton?.setOnClickListener {
-            if (binding?.searchView?.text?.isNotBlank() == true) {
-                mainViewModel.fetchImages(binding?.searchView?.text.toString())
-            }
-        }
-        binding?.recyclerView?.layoutManager = LinearLayoutManager(this)
-        adapter = MainAdapter(arrayListOf())
-        binding?.recyclerView?.addItemDecoration(
-            DividerItemDecoration(
-                binding?.recyclerView?.context,
-                (binding?.recyclerView?.layoutManager as LinearLayoutManager).orientation
-            )
-        )
-        binding?.recyclerView?.adapter = adapter
 
+        binding.run {
+            searchButton.setOnClickListener {
+                if (searchView.text?.isNotBlank() == true) {
+                    mainViewModel.fetchImages(searchView.text.toString())
+                }
+            }
+            recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = MainAdapter(arrayListOf())
+            recyclerView.addItemDecoration(
+                DividerItemDecoration(recyclerView.context, (recyclerView.layoutManager as LinearLayoutManager).orientation)
+            )
+            recyclerView.adapter = adapter
+        }
     }
 
     private fun setupObserver() {
         mainViewModel.photos.observe(this, {
             when (it.status) {
                 Status.SUCCESS -> {
-                    binding?.progressBar?.visibility = View.GONE
-                    it.data?.let { photos -> renderList(photos) }
-                    binding?.recyclerView?.visibility = View.VISIBLE
+                    binding.run {
+                        progressBar.visibility = View.GONE
+                        it.data?.let { photos -> renderList(photos) }
+                        recyclerView.visibility = View.VISIBLE
+                    }
                 }
                 Status.LOADING -> {
-                    binding?.progressBar?.visibility = View.VISIBLE
-                    binding?.recyclerView?.visibility = View.GONE
+                    binding.run {
+                        progressBar.visibility = View.VISIBLE
+                        recyclerView.visibility = View.GONE
+                    }
                 }
                 Status.ERROR -> {
                     //Handle Error
-                    binding?.progressBar?.visibility = View.GONE
+                    binding.run {
+                        progressBar.visibility = View.GONE
+                    }
                     Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
                 }
             }
@@ -73,11 +78,6 @@ class MainActivity : AppCompatActivity() {
             addData(flickerPhotos)
             notifyDataSetChanged()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
     }
 
 }
