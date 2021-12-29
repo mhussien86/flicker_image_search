@@ -1,6 +1,7 @@
 package com.application.flickerimagesearch.di.module
 
 import com.application.flickerimagesearch.BuildConfig.BASE_URL
+import com.application.flickerimagesearch.BuildConfig.API_KEY
 import com.application.flickerimagesearch.BuildConfig.DEBUG
 import com.application.flickerimagesearch.data.api.ApiHelper
 import com.application.flickerimagesearch.data.api.ApiHelperImpl
@@ -15,6 +16,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -23,6 +25,10 @@ class ApplicationModule {
 
     @Provides
     fun provideBaseUrl() = BASE_URL
+
+    @Provides
+    @API_KEY
+    fun provideApiKey() = API_KEY
 
     @Provides
     @Singleton
@@ -63,4 +69,8 @@ class ApplicationModule {
     @Singleton
     fun provideApiHelper(apiHelper: ApiHelperImpl): ApiHelper = apiHelper
 
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class API_KEY
 }
