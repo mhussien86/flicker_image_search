@@ -9,6 +9,7 @@ import com.application.flickerimagesearch.data.repository.PhotosRepository
 import com.application.flickerimagesearch.utils.NetworkHelper
 import com.application.flickerimagesearch.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,14 +27,15 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _photos.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
-                mainRepository.fetchImages(searchText).let { searchResponse ->
-                    if (searchResponse.isSuccessful) {
-                        _photos.postValue(Resource.success(searchResponse.body()?.photos?.photo))
-                    } else _photos.postValue(Resource.error(searchResponse.errorBody().toString(), null))
+                mainRepository.fetchImages(searchText).let { responseFlow ->
+                    responseFlow.collect() { response ->
+                        if (response.isSuccessful) {
+                            _photos.postValue(Resource.success(response.body()?.photos?.photo))
+                        } else _photos.postValue(Resource.error(response.errorBody().toString(), null))
+                    }
                 }
             } else _photos.postValue(Resource.error("No internet connection", null))
         }
-
     }
 }
 
