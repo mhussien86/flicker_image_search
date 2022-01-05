@@ -11,7 +11,7 @@ Android SDK with android studio on your machine.
 ### Improvments + missings ###
 * No tests added to the project. 
 * Use jetpack compose instead of xml. 
-* Use Flow instead of viemodels. 
+* Use StateFlow instead of LiveData.
 * Remove deprectaed code (kotlin synthetics) + some api from network manager. 
 * Hide the API key in the project, for now it is just for testing. 
 
