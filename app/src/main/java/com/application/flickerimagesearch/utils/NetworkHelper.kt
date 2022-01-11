@@ -27,18 +27,16 @@ class NetworkHelper @Inject constructor(@ApplicationContext private val context:
             }
         } else {
             connectivityManager.run {
-                connectivityManager.activeNetworkInfo?.run {
+                activeNetworkInfo?.run {
                     result = when (type) {
                         ConnectivityManager.TYPE_WIFI -> true
                         ConnectivityManager.TYPE_MOBILE -> true
                         ConnectivityManager.TYPE_ETHERNET -> true
                         else -> false
                     }
-
                 }
             }
         }
-
         return result
     }
 }
